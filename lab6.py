@@ -5,7 +5,7 @@ EPS = 0.00001
 MAX_ITER = 10000
 
 def differenceNorm(matr, vec, val):
-	return al.norm(np.matmul(matr, vec) - vec*val)
+	return al.norm(np.dot(matr, vec) - vec*val)
 
 def frobeniusNorm(matr):
 	tmp = 0
@@ -28,8 +28,8 @@ def qrMethod(matr):
 	i = 0
 	while (acc == False) and (i < MAX_ITER):
 		tmp1, tmp2 = al.qr(val)
-		vec = np.matmul(vec, tmp1)
-		val = np.matmul(tmp2, tmp1)
+		vec = np.dot(vec, tmp1)
+		val = np.dot(tmp2, tmp1)
 		acc = accuracyCheck(matr, vec, val)
 		i += 1
 		print i, "- th iteration:", "\nFrobenius norm =", frobeniusNorm(vec), "\nDifference norm of first eigvector and first eigvalue =", differenceNorm(matr, vec[ : , 1], val[1][1]), "\n"
@@ -42,19 +42,19 @@ def powerMethod(matr):
 	val = 0
 	i = 0
 	while (acc == False) and (i < MAX_ITER):
-		newVec = np.matmul(matr, vec)
+		newVec = np.dot(matr, vec)
 		val = al.norm(newVec)/al.norm(vec)
 		newVec = newVec/al.norm(newVec)
 		if al.norm(newVec - vec) <= EPS:
 			acc = True
 		i += 1
 		vec = newVec
-		if (vec[0] <= 0 and np.matmul(matr, vec)[0] >= 0) or (vec[0] >= 0 and np.matmul(matr, vec)[0] <= 0): val = -val
+		if (vec[0] <= 0 and np.dot(matr, vec)[0] >= 0) or (vec[0] >= 0 and np.dot(matr, vec)[0] <= 0): val = -val
 			return vec, val
 
-matrix = np.array([[6.48, 1.24, 0.83, 1.21],
-				   [1.24, 3.94, 1.3, 0.16],
-				   [0.83, 1.3, 5.66, 2.1],
+matrix = np.array([[6.48, 1.12, 0.95, 1.21],
+				   [1.12, 3.94, 1.3, 0.16],
+				   [0.95, 1.3, 5.66, 2.1],
 				   [1.21, 0.16, 2.1, 5.88]])
 
 print "Matrix:\n", matrix
